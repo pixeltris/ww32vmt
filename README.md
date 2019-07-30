@@ -6,6 +6,10 @@ It has been tested on v86, JSLinux, and DOSBox.
 
 It works on Windows 95, Windows 98, and Windows 2000 guest operating systems.
 
+![Screenshot](pics/v86.png)
+
+The above image shows copy.sh/v86/ loaded without any external proxy server. In the background are some header files from TCC which were transerred into the VM, those files were then copied back out of the VM as "Shared (1).zip".
+
 ## How it works
 
 It works by searching for specific blocks in the memory of the guest OS, then using those blocks of memory as a way of communicating between JavaScript in the win32 tool coded in C. This method of communication means that very little needs to be known about the internals of the emulator, and no direct modifications of the emulator are required (other than getting access to the OS memory in the global scope of JavaScript).
