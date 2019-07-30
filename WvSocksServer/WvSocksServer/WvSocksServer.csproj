@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5E943CAA-DEB6-4D17-9125-F3B3A99DAFED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>WvSocksServer</RootNamespace>
+    <AssemblyName>WvSocksServer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fleck\ConnectionNotAvailableException.cs" />
+    <Compile Include="Fleck\FleckLog.cs" />
+    <Compile Include="Fleck\FrameType.cs" />
+    <Compile Include="Fleck\HandlerFactory.cs" />
+    <Compile Include="Fleck\Handlers\ComposableHandler.cs" />
+    <Compile Include="Fleck\Handlers\Draft76Handler.cs" />
+    <Compile Include="Fleck\Handlers\FlashSocketPolicyRequestHandler.cs" />
+    <Compile Include="Fleck\Handlers\Hybi13Handler.cs" />
+    <Compile Include="Fleck\Helpers\FleckRuntime.cs" />
+    <Compile Include="Fleck\Interfaces\IHandler.cs" />
+    <Compile Include="Fleck\Interfaces\ISocket.cs" />
+    <Compile Include="Fleck\Interfaces\IWebSocketConnection.cs" />
+    <Compile Include="Fleck\Interfaces\IWebSocketConnectionInfo.cs" />
+    <Compile Include="Fleck\Interfaces\IWebSocketServer.cs" />
+    <Compile Include="Fleck\IntExtensions.cs" />
+    <Compile Include="Fleck\QueuedStream.cs" />
+    <Compile Include="Fleck\ReadState.cs" />
+    <Compile Include="Fleck\RequestParser.cs" />
+    <Compile Include="Fleck\SocketWrapper.cs" />
+    <Compile Include="Fleck\SubProtocolNegotiationFailureException.cs" />
+    <Compile Include="Fleck\SubProtocolNegotiator.cs" />
+    <Compile Include="Fleck\WebSocketConnection.cs" />
+    <Compile Include="Fleck\WebSocketConnectionInfo.cs" />
+    <Compile Include="Fleck\WebSocketException.cs" />
+    <Compile Include="Fleck\WebSocketHttpRequest.cs" />
+    <Compile Include="Fleck\WebSocketServer.cs" />
+    <Compile Include="Fleck\WebSocketStatusCodes.cs" />
+    <Compile Include="Mentalis.Proxy\AuthBase.cs" />
+    <Compile Include="Mentalis.Proxy\AuthenticationList.cs" />
+    <Compile Include="Mentalis.Proxy\AuthNone.cs" />
+    <Compile Include="Mentalis.Proxy\AuthUserPass.cs" />
+    <Compile Include="Mentalis.Proxy\Client.cs" />
+    <Compile Include="Mentalis.Proxy\FtpClient.cs" />
+    <Compile Include="Mentalis.Proxy\FtpDataConnection.cs" />
+    <Compile Include="Mentalis.Proxy\FtpListener.cs" />
+    <Compile Include="Mentalis.Proxy\HttpClient.cs" />
+    <Compile Include="Mentalis.Proxy\HttpListener.cs" />
+    <Compile Include="Mentalis.Proxy\Listener.cs" />
+    <Compile Include="Mentalis.Proxy\PortMapClient.cs" />
+    <Compile Include="Mentalis.Proxy\PortMapListener.cs" />
+    <Compile Include="Mentalis.Proxy\Proxy.cs" />
+    <Compile Include="Mentalis.Proxy\ProxyConfig.cs" />
+    <Compile Include="Mentalis.Proxy\Socks4Handler.cs" />
+    <Compile Include="Mentalis.Proxy\Socks5Handler.cs" />
+    <Compile Include="Mentalis.Proxy\SocksClient.cs" />
+    <Compile Include="Mentalis.Proxy\SocksHandler.cs" />
+    <Compile Include="Mentalis.Proxy\SocksListener.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
