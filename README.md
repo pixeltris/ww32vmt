@@ -16,7 +16,7 @@ One drawback of this approach is that as the OS memory gets more fragmented it b
 
 If you're using v86 see the notes [here](https://github.com/pixeltris/ww32vmt/blob/2ef570fd1391d7f0925f25d5fa9c59ffd69c1ce2/vmtools.js#L12).
 
-- Compile vmtools.c / vmtools_stub.c with TCC (see the first lines of those c files for compilation args). Using TCC is important on vmtools_stub.c in order to keep it at or under 4096 bytes long.
+- Compile vmtools.c / vmtools_stub.c with TCC (see the first lines of those c files for compilation args). Using TCC is important on vmtools_stub.c in order to keep it at or under 4096 bytes long. _[Feel free to use the prebuilt binaries](https://github.com/pixeltris/ww32vmt/tree/master/build)_
 - Load the desired x86 web VM which runs Windows.
 - Copy / paste vmtools.js into the developer tools console (`F12` / `Ctrl+Shift+J`).
 - Create a text file in the VM with text `!hello-x86!fffffffffffffff` (f repeated 4k+ times) using notepad, and save it as an executable (.exe).
