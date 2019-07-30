@@ -12,7 +12,7 @@ The above image shows copy.sh/v86/ loaded without any external proxy server. In 
 
 ## How it works
 
-It works by searching for specific blocks in the memory of the guest OS, then using those blocks of memory as a way of communicating between JavaScript in the win32 tool coded in C. This method of communication means that very little needs to be known about the internals of the emulator, and no direct modifications of the emulator are required (other than getting access to the OS memory in the global scope of JavaScript).
+It works by searching for specific blocks in the memory of the guest OS, then using those blocks of memory as a way of communicating between JavaScript and the win32 tool coded in C. This method of communication means that very little needs to be known about the internals of the emulator, and no direct modifications of the emulator are required (other than getting access to the OS memory in the global scope of JavaScript).
 
 One drawback of this approach is that as the OS memory gets more fragmented it becomes less likely that it will be able to find the desired blocks of memory. With some additional knowledge of the internal layout of memory it might be possible to ensure a 100% success rate of finding the blocks.
 
