@@ -1723,18 +1723,18 @@ VMM.prototype.processNetworkPacket = function(packetData)
 VMM.prototype.processClipboardPacket = function(packetData)
 {
     var buffer = packetData.Buffer;
-    if (buffer[0] == 0)
+    if (buffer[1] == 0)
     {
         // Set clipboard data (response)
     }
-    else if (buffer[0] == 1)
+    else if (buffer[1] == 1)
     {
         // Get clipboard data (response)
-        switch (buffer[1])
+        switch (buffer[2])
         {
             case 0:// Text
                 {
-                    var text = bufferToUtf16(buffer.slice(2, buffer.length).buffer);
+                    var text = bufferToUtf16(buffer.slice(3, buffer.length).buffer);
                     //console.log(buffer);
                     //console.log("'" + text + "'");
                     var setClipboard = false;
@@ -1765,9 +1765,9 @@ VMM.prototype.processClipboardPacket = function(packetData)
             // No easy way to copy images to the clipboard?
             /*case 1:// Image
                 {
-                    var width = (new Uint32Array(buffer.slice(2, 6).buffer))[0];
-                    var height = (new Uint32Array(buffer.slice(6, 10).buffer))[0];
-                    console.log(buffer.slice(2, buffer.length));
+                    var width = (new Uint32Array(buffer.slice(3, 7).buffer))[0];
+                    var height = (new Uint32Array(buffer.slice(7, 11).buffer))[0];
+                    console.log(buffer.slice(3, buffer.length));
                 }
                 break;*/
         }

@@ -637,10 +637,10 @@ void processNetworkPacket(PacketData* packetData)
 void processClipboardPacket(PacketData* packetData)
 {
 	uint8_t* buffer = packetData->Buffer;
-	if (buffer[0] == 0)
+	if (buffer[1] == 0)
 	{
 		// Set clipboard data
-		switch (buffer[1])
+		switch (buffer[2])
 		{
 			case 0:// Text
 				{
@@ -648,8 +648,8 @@ void processClipboardPacket(PacketData* packetData)
 					{
 						if (EmptyClipboard())
 						{
-							wchar_t* utf16Str = (wchar_t*)(buffer + 2);
-							int32_t utf16ByteLen = (packetData->Length - 2);
+							wchar_t* utf16Str = (wchar_t*)(buffer + 3);
+							int32_t utf16ByteLen = (packetData->Length - 3);
 							int32_t utf16StrLen = utf16ByteLen / sizeof(wchar_t);
 							
 							// Windows 2000+ has full support for CF_UNICODETEXT.
@@ -729,7 +729,7 @@ void processClipboardPacket(PacketData* packetData)
 				break;
 		}
 	}
-	else if (buffer[0] == 1)
+	else if (buffer[1] == 1)
 	{
 		// Get clipboard data
 		if (OpenClipboard(NULL))
