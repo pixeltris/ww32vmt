@@ -18,8 +18,6 @@ One drawback of this approach is that as the OS memory gets more fragmented it b
 
 ## Usage
 
-If you're using v86 see the notes [here](https://github.com/pixeltris/ww32vmt/blob/2ef570fd1391d7f0925f25d5fa9c59ffd69c1ce2/vmtools.js#L12).
-
 - Compile vmtools.c / vmtools_stub.c with TCC (see the first lines of those c files for compilation args). Using TCC is important on vmtools_stub.c in order to keep it at or under 4096 bytes long. _[Feel free to use the prebuilt binaries](https://github.com/pixeltris/ww32vmt/tree/master/build)_
 - Load the desired x86 web VM which runs Windows.
 - Copy / paste vmtools.js into the developer tools console (`F12` / `Ctrl+Shift+J`).
@@ -27,6 +25,15 @@ If you're using v86 see the notes [here](https://github.com/pixeltris/ww32vmt/bl
 - Click `upload tools` and select both files `vmtools.exe` / `vmtools_stub.exe`.
 - Copy/paste the text file executable. Run the copied version (creating a copy is only really required on Windows 2000, as it fails to run the original).
 - Click the `connect` button. It should now be connected to the VM.
+
+#### v86
+
+- Place a breakpoint on state.js (restore_object), step over the last line and enter into the console: HEAPU8=this.fa. You need to do this every time you load the state.
+
+#### Windows 95
+
+- Copy Windows/System/msvcrt40.dll next to vmtools.exe, rename it to msvcrt.dll
+- Copy Windows/System/Wsock32.dll next to vmtools.exe, rename it to ws2_32.dll _(if Winsock2 is installed you shouldn't have to do this)_
 
 ## Internet
 
