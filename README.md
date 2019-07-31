@@ -45,9 +45,10 @@ NOTE: Internet access depends on TCP/IP being installed (and maybe Winsock 2+)
 
 #### IP/ports used in the VM
 
+- SOCKS - localhost:1080
+- DNS - localhost:53
 - HTTP - localhost:80
 - HTTPS - localhost:443 (doesn't work on Internet Explorer?)
-- DNS - localhost:53
 - HTTP (XMLHttpRequest) - localhost:980
 - HTTPS (XMLHttpRequest) - localhost:9443 (this currently isn't implemented as it requires manually handling TLS/SSL)
 

@@ -434,9 +434,9 @@ function onUploadToolsToVm()
                     console.log("Invalid upload. Expected 2 files, found " + files.length + ".");
                     break;
                 }
-                if (g_vmm.fileBlocks != null)
+                if (fileName.includes("_stub.exe"))
                 {
-                    if (fileName.includes("_stub.exe"))
+                    if (g_vmm.fileBlocks != null)
                     {
                         if (fileBuffer.length > g_vmm.fileBlocks.numBytes)
                         {
@@ -449,10 +449,10 @@ function onUploadToolsToVm()
                             console.log("Transferred file!");
                         }
                     }
-                    else
-                    {
-                        g_vmm.toolsFileBuffer = fileBuffer;
-                    }
+                }
+                else
+                {
+                    g_vmm.toolsFileBuffer = fileBuffer;
                 }
             }
         }
@@ -1135,7 +1135,12 @@ VMM.prototype.initPacketOffsets = function()
 
 function bufferToAscii(buffer)
 {
-    return String.fromCharCode.apply(null, buffer);
+    var result = "";
+    for (var i = 0; i < buffer.length; i++)
+    {
+        result += String.fromCharCode(buffer[i]);
+    }
+    return result;
 }
 
 function asciiToBuffer(str)
@@ -1152,7 +1157,13 @@ function asciiToBuffer(str)
 function bufferToUtf16(buffer)
 {
     // The passed in param should be an ArrayBuffer (not a Uint8Array or similar)
-    return String.fromCharCode.apply(null, new Uint16Array(buffer));
+    var result = "";
+    var uint16Array = new Uint16Array(buffer);
+    for (var i = 0; i < uint16Array.length; i++)
+    {
+        result += String.fromCharCode(uint16Array[i]);
+    }
+    return result;
 }
 
 function utf16ToBuffer(str)
@@ -1320,7 +1331,7 @@ VMM.prototype.processHttpQuery = function(connection, query)
                     {
                         var redirectUrl = "http://" + responseURL.host + responseURL.pathname;
                         //console.log("redirect to '" + redirectUrl + "'");
-                        vmm.sendHttpContentMoved(connection, redirectUrl);
+                        g_vmm.sendHttpContentMoved(connection, redirectUrl);
                         requestRedirected = true;
                         request.abort();
                     }
@@ -1356,17 +1367,23 @@ VMM.prototype.processHttpQuery = function(connection, query)
                             if (DOWNGRADE_HTTPS)
                             {
                                 var contentType = responseHeaders.get("content-type");
-                                if (contentType != null && (contentType.includes("text/html") ||
-                                    contentType.includes("text/css") || contentType.includes("text/javascript") ||
-                                    contentType.includes("application/xml") || contentType.includes("text/xml")))
+                                if (contentType != null && (
+                                    contentType.includes("text/html") ||
+                                    contentType.includes("text/css") ||
+                                    contentType.includes("text/javascript") ||
+                                    contentType.includes("application/javascript") ||
+                                    contentType.includes("application/xml") ||
+                                    contentType.includes("text/xml")))
                                 {
                                     // TODO: Support for different text encodings
                                     var contentStr = new TextDecoder("utf-8").decode(responseBuffer);
                                     contentStr = strReplaceAll(contentStr, "https://", "http://");
                                     responseBuffer = new Uint8Array((new TextEncoder("utf-8").encode(contentStr)));
                                     
-                                    // TODO: Update the content length rather than removing it?
-                                    responseHeaders.delete("content-length");
+                                    if (responseHeaders.has("content-length"))
+                                    {
+                                        responseHeaders.set("content-length", responseBuffer.length);
+                                    }
                                 }
                             }
                             
@@ -1378,7 +1395,7 @@ VMM.prototype.processHttpQuery = function(connection, query)
                         }
                         else
                         {
-                            vmm.sendBadHttpRequest(connection);
+                            g_vmm.sendBadHttpRequest(connection);
                             return;
                         }
                         
@@ -1401,21 +1418,21 @@ VMM.prototype.processHttpQuery = function(connection, query)
                     }
                     catch (err)
                     {
-                        vmm.sendExceptionInfoRequest(connection, err.message, err.stack);
+                        g_vmm.sendHttpExceptionInfo(connection, err.message, err.stack);
                     }
                 }
             };
             request.onerror = function(e)
             {
                 var additionalInfo = request.status == 0 ? " (check your browser console log, likely a CORS issue)" : "";
-                vmm.sendExceptionInfoRequest(connection, "statusCode: " + request.status + " statusText: " + request.statusText + additionalInfo);
+                g_vmm.sendHttpExceptionInfo(connection, "statusCode: " + request.status + " statusText: " + request.statusText + additionalInfo);
             };
             request.open(httpRequestType, "//" + host + httpRequestedPath, true);
             request.send(httpRequestPostBuffer);
         }
         catch (err)
         {
-            this.sendExceptionInfoRequest(connection, err.message, err.stack);
+            this.sendHttpExceptionInfo(connection, err.message, err.stack);
         }
     }
 };
@@ -1564,7 +1581,10 @@ VMM.prototype.processNetworkPacket = function(packetData)
                                 var recvBuffer = buffer.slice(10);
                                 var str = bufferToAscii(recvBuffer);
                                 connection.HttpQuery += str;
-                                Array.prototype.push.apply(connection.HttpRequestBuffer, Array.from(recvBuffer));
+                                for (var i = 0; i < recvBuffer.length; i++)
+                                {
+                                    connection.HttpRequestBuffer.push(recvBuffer[i]);
+                                }
                                 if (this.isValidHttpQuery(connection, connection.HttpQuery))
                                 {
                                     this.processHttpQuery(connection, connection.HttpQuery);
@@ -2359,8 +2379,8 @@ VMM.prototype.processPackets = function()
                     var packetData = this.packetReaders[i];
                     if (packetData != null)
                     {
-                        console.assert(packetReaders[i].Next == null);
-                        packetReaders[i] = null;
+                        console.assert(this.packetReaders[i].Next == null);
+                        this.packetReaders[i] = null;
                     }
                 }
                 else if (totalLen > 0)
